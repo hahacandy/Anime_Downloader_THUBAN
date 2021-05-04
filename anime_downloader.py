@@ -142,7 +142,10 @@ if response.status_code == 200:
         print('anime downloading...')
         for idx, ani_ep in enumerate(ani_ep_list):
             result = 1
-            while result == 1:
+            down_try = 0
+            while result == 1 and down_try < 5:
+                down_try = down_try + 1
+            
                 ep_number = str(idx+1)
                 if len(ep_number) < 2:
                     ep_number = '0' + ep_number
