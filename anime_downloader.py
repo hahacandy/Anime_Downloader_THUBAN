@@ -150,7 +150,7 @@ if response.status_code == 200:
                 if len(ep_number) < 2:
                     ep_number = '0' + ep_number
                 print(anime_name, "ep"+str(idx+1) + " downloading", str(idx+1) + "/" + str(len(ani_ep_list)))
-                cmd = "aria2c -c -x 4 -d "+save_dir+" -m 5 -o " save_anime_name + " " + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
+                cmd = "aria2c -c -x 4 -d "+save_dir+" -m 5 -o " + save_anime_name + " " + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
                 result = os.system(cmd)
                 if result == 0:
                     print(anime_name, "ep"+str(idx+1) + " downloaded", str(idx+1) + "/" + str(len(ani_ep_list)))
