@@ -47,7 +47,7 @@ while True:
 
             anime_name = searched_anime_lists[ani_sel-1]['name']
             print()
-            print("you choice : " + anime_name)
+            print("Your choice : " + anime_name)
             print()
 
 
@@ -111,7 +111,7 @@ while True:
                         url = driver.find_element_by_xpath('//*[@id="player"]/iframe').get_attribute('src')
 
                         mp4 = requests.get(url).text
-                        mp4 = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=_]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+mp4', mp4)
+                        mp4 = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=_]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\'', mp4)[0]
 
                         ani_ep['url'] = url
                         ani_ep['mp4'] = mp4
