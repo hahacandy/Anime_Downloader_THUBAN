@@ -111,7 +111,7 @@ while True:
                         url = driver.find_element_by_xpath('//*[@id="player"]/iframe').get_attribute('src')
 
                         mp4 = requests.get(url).text
-                        mp4 = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=_]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\'', mp4)[0]
+                        mp4 = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=_]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\'', mp4)[0][:-1]
 
                         ani_ep['url'] = url
                         ani_ep['mp4'] = mp4
@@ -153,6 +153,7 @@ while True:
                         ep_number = '0' + ep_number
                     print(anime_name, "ep"+str(idx+1) + " downloading", str(idx+1) + "/" + str(len(ani_ep_list)))
                     cmd = "aria2c -c -x 4 -d "+save_dir+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
+                    print(cmd)
                     result = os.system(cmd)
                     if result == 0:
                         print(anime_name, "ep"+str(idx+1) + " downloaded", str(idx+1) + "/" + str(len(ani_ep_list)))
