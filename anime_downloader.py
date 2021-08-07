@@ -60,7 +60,7 @@ while True:
                 # Chrome v75 and lower:
                 # option.add_argument("--headless") 
                 # Chrome v 76 and above (v76 released July 30th 2019):
-                option.headless = True
+                #option.headless = True
 
                 option.add_argument('--window-size=1024x768')
                 option.add_argument('--disable-gpu')
@@ -73,6 +73,19 @@ while True:
 
                 driver = webdriver.Chrome('./driver/chromedriver.exe', options=option)
                 return driver
+
+
+            def createFolder(directory):
+                try:
+                    if not os.path.exists(directory):
+                        os.makedirs(directory)
+                except OSError:
+                    print ('Error: Creating directory. ' +  directory)
+
+            save_anime_name = anime_name.replace(' ', '_')
+            save_dir = save_dir + "\\" + save_anime_name
+            createFolder("ani")
+            createFolder(save_dir)
 
 
             print("anime page loding...")
@@ -108,17 +121,21 @@ while True:
 
                 while True:
                     try:
-                        url = driver.find_element_by_xpath('//*[@id="player"]/iframe').get_attribute('src')
-
-                        mp4 = requests.get(url).text
-                        mp4 = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$\-@\.&+:/?=_]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+\'', mp4)[0][:-1]
-
-                        ani_ep['url'] = url
+                        driver.switch_to.frame(driver.find_element_by_xpath('//*[@id="player"]/iframe'))
+                        driver.switch_to.frame(driver.find_element_by_xpath('/html/body/iframe'))
+                        mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
+                        
                         ani_ep['mp4'] = mp4
                         break
                     except:
-                        pass
+                        driver.switch_to.default_content()
+                        
+                driver.switch_to.default_content()   
                 print("anime info loding " + str(idx+1) + "/" + str(len(ani_ep_list)))
+
+            driver.quit()
+            print("anime info load clear")
+            print()
 
             driver.quit()
             print("anime info load clear")
@@ -126,20 +143,7 @@ while True:
 
 
 
-            
-
-            def createFolder(directory):
-                try:
-                    if not os.path.exists(directory):
-                        os.makedirs(directory)
-                except OSError:
-                    print ('Error: Creating directory. ' +  directory)
-
-            save_anime_name = anime_name.replace(' ', '_')
-            save_dir = save_dir + "\\" + save_anime_name
-            createFolder("ani")
-            createFolder(save_dir)
-
+           
             
             print('anime downloading...')
             for idx, ani_ep in enumerate(ani_ep_list):
