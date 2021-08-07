@@ -4,6 +4,7 @@ from selenium import webdriver
 import re
 import os
 from tqdm import tqdm
+import time
 
 save_dir = "Y:\Anime"
 URL = 'https://123animes.mobi'
@@ -83,9 +84,9 @@ while True:
                     print ('Error: Creating directory. ' +  directory)
 
             save_anime_name = anime_name.replace(' ', '_')
-            save_dir = save_dir + "\\" + save_anime_name
+            save_dir2 = save_dir + "\\" + save_anime_name
             createFolder("ani")
-            createFolder(save_dir)
+            createFolder(save_dir2)
 
 
             print("anime page loding...")
@@ -121,14 +122,21 @@ while True:
 
                 while True:
                     try:
-                        driver.switch_to.frame(driver.find_element_by_xpath('//*[@id="player"]/iframe'))
-                        driver.switch_to.frame(driver.find_element_by_xpath('/html/body/iframe'))
+                        driver.find_element_by_xpath('//*[@id="player"]/iframe')
+                        break
+                    except:
+                        time.sleep(1)
+                
+                
+                while True:
+                    try:
+                        driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
                         mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
                         
                         ani_ep['mp4'] = mp4
                         break
                     except:
-                        driver.switch_to.default_content()
+                        pass
                         
                 driver.switch_to.default_content()   
                 print("anime info loding " + str(idx+1) + "/" + str(len(ani_ep_list)))
@@ -137,9 +145,7 @@ while True:
             print("anime info load clear")
             print()
 
-            driver.quit()
-            print("anime info load clear")
-            print()
+
 
 
 
@@ -156,7 +162,7 @@ while True:
                     if len(ep_number) < 2:
                         ep_number = '0' + ep_number
                     print(anime_name, "ep"+str(idx+1) + " downloading", str(idx+1) + "/" + str(len(ani_ep_list)))
-                    cmd = "aria2c -c -x 4 -d "+save_dir+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
+                    cmd = "aria2c -c -x 4 -d "+save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
                     print(cmd)
                     result = os.system(cmd)
                     if result == 0:
