@@ -1,6 +1,7 @@
 import requests 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import re
 import os
 from tqdm import tqdm
@@ -131,7 +132,10 @@ while True:
                 while True:
                     try:
                         driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
+                        driver.find_element_by_tag_name('video').send_keys(Keys.ENTER)
                         mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
+                        
+                        print("주소:" + mp4)
                         
                         ani_ep['mp4'] = mp4
                         break
