@@ -4,7 +4,6 @@ from selenium import webdriver
 import re
 import os
 import time
-import m3u8_To_MP4
 import shutil
 
 save_dir = "Y:\Anime"
@@ -156,7 +155,7 @@ def get_ani_ep_pages_and_urls(_ani_page):
                     JS_get_network_requests = "var performance = window.performance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
                     network_requests = driver.execute_script(JS_get_network_requests)
                     for n in network_requests:
-                        if ".m3u8" in n["name"]: 
+                        if ".m3u8" in n["name"] and "list" not in n["name"]: 
                             mp4 = n["name"]
 
                 print("주소:" + mp4)
@@ -204,12 +203,10 @@ def download_anime(_ani_ep_list):
                 ep_number = '0' + ep_number
             print(anime_name, "ep"+str(idx+1) + " downloading", str(idx+1) + "/" + str(len(_ani_ep_list)))
             if ".m3u8" in ani_ep['mp4']:
-                m3u8_To_MP4.download(ani_ep['mp4'])
-                
                 ani_save_path = save_dir2 + "/" + save_anime_name + "_ep" + ep_number + ".mp4"
                 
-                shutil.move('m3u8_To_Mp4.mp4', ani_save_path)
-                
+                os.system('ffmpeg -i ' + ani_ep['mp4'] + ' -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 ' + ani_save_path)
+
                 if os.path.isfile(ani_save_path):
                     result = 0
             else:
