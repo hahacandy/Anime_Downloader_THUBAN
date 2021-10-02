@@ -205,7 +205,13 @@ def download_anime(_ani_ep_list):
             print(anime_name, "ep"+str(idx+1) + " downloading", str(idx+1) + "/" + str(len(_ani_ep_list)))
             if ".m3u8" in ani_ep['mp4']:
                 m3u8_To_MP4.download(ani_ep['mp4'])
-                shutil.move('m3u8_To_Mp4.mp4', save_dir2 + "/" + save_anime_name + "_ep" + ep_number + ".mp4")
+                
+                ani_save_path = save_dir2 + "/" + save_anime_name + "_ep" + ep_number + ".mp4"
+                
+                shutil.move('m3u8_To_Mp4.mp4', ani_save_path)
+                
+                if os.path.isfile(ani_save_path):
+                    result = 0
             else:
                 cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
                 print(cmd)
