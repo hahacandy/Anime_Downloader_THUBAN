@@ -131,22 +131,14 @@ def get_ani_ep_pages_and_urls(_ani_page):
             while i < 5:
                 i = i + 1
                 try:
-                    driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
-                    video_time = driver.find_element_by_xpath('//*[@id="player"]/div[2]/div[12]/div[4]/div/div[10]').text
-                    
-                    if "00:00" in video_time:
-                        continue
-                    
-                    driver.switch_to.default_content()
+                    driver.find_elements_by_tag_name('iframe')[0]
                     i = -1
                     break
                 except:
                     time.sleep(1)
                     
-                driver.switch_to.default_content()
-                    
-        time.sleep(1)
-        while True:
+        i = 0
+        while i >= 0:
             try:
                 driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
                 mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
@@ -158,10 +150,14 @@ def get_ani_ep_pages_and_urls(_ani_page):
                         if ".m3u8" in n["name"] and "list" not in n["name"]: 
                             mp4 = n["name"]
 
-                print("주소:" + mp4)
+                            print("주소:" + mp4)
 
-                ani_ep['mp4'] = mp4
-                break
+                            ani_ep['mp4'] = mp4
+                            i = -1 #while break
+                            break
+                elif '.mp4' in mp4:
+                    break
+                    
             except:
                 driver.switch_to.default_content()   
 
