@@ -1,7 +1,6 @@
 import requests 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 import re
 import os
 import time
@@ -151,7 +150,6 @@ def get_ani_ep_pages_and_urls(_ani_page):
         while True:
             try:
                 driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
-                #driver.find_element_by_tag_name('video').send_keys(Keys.ENTER)
                 mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
 
                 if 'blob' in mp4:
@@ -190,7 +188,7 @@ def download_anime(_ani_ep_list):
     
     print('anime downloading...')
     
-    save_anime_name = anime_name.replace(' ', '_')
+    save_anime_name = anime_name.replace(' ', '_').replace(':','')
     save_dir2 = save_dir + "\\" + save_anime_name
     createFolder("ani")
     createFolder(save_dir2)
@@ -209,7 +207,7 @@ def download_anime(_ani_ep_list):
                 m3u8_To_MP4.download(ani_ep['mp4'])
                 shutil.move('m3u8_To_Mp4.mp4', save_dir2 + "/" + save_anime_name + "_ep" + ep_number + ".mp4")
             else:
-                cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4" + " " + ''.join(ani_ep['mp4'])
+                cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
                 print(cmd)
                 result = os.system(cmd)
             if result == 0:
