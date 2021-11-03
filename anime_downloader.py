@@ -144,11 +144,13 @@ def get_anime_down_url(driver, ani_ep_list):
                 if 'blob' in mp4:
                     JS_get_network_requests = "var performance = window.performance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
                     network_requests = driver.execute_script(JS_get_network_requests)
+                    referer = network_requests[0]['name']
                     for n in network_requests:
                         if "list" not in n["name"]:
-                            if ".m3u8" in n["name"]: 
+                            if ".m3u8" in n["name"] and "360" in n["name"] or "720" in n["name"] or "1080" in n["name"]: 
                                 mp4 = n["name"]
                                 ani_ep['mp4'] = mp4
+                                ani_ep['referer'] = referer
                                 i = -1 #while break
                                 break
                 elif '.mp4' in mp4:
@@ -163,7 +165,8 @@ def get_anime_down_url(driver, ani_ep_list):
             driver.switch_to.window(driver.window_handles[0]) 
 
                 
-        print("주소:" + mp4)
+        print("주소:" + ani_ep['mp4'])
+        print("레퍼런스:" + ani_ep['referer'])
         driver.switch_to.default_content()   
         print("anime info loding " + str(idx+1) + "/" + str(len(ani_ep_list)))
 
@@ -208,8 +211,10 @@ def download_anime2(idx, ani_ep, _ani_ep_list, save_anime_name, save_dir2, threa
         if ".m3u8" in ani_ep['mp4']:
             ani_save_path = save_dir2 + "/" + save_anime_name + "_ep" + ep_number + ".mp4"
             
-            os.system('ffmpeg -i ' + ani_ep['mp4'] + ' -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 ' + ani_save_path)
-
+            cmd = 'ffmpeg -y -referer \"' + ani_ep['referer'] + '\" -i \"' + ani_ep['mp4'] + '\" -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 ' + ani_save_path
+            print(cmd)
+            os.system(cmd)
+            
             if os.path.isfile(ani_save_path):
                 result = 0
         else:
