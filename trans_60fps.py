@@ -42,8 +42,8 @@ for path, dirs, files in os.walk(anime_path):
                 print('cp:' + str(file_path) + '->' + change_name)
                 
                 
-            #동시에 최대 4개까지만 인코딩 가능하게.
-            if len(thread_list) >= 4:
+            #동시에 최대 6개까지만 인코딩 가능하게.
+            if len(thread_list) >= 6:
                 for t in thread_list:
                     t.join()
                 #쓰레드 배열 삭제
