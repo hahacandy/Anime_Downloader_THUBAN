@@ -155,12 +155,12 @@ def get_anime_down_url(driver, ani_ep_list):
                     referer = network_requests[0]['name']
                     for n in network_requests:
                         if ".m3u8" in n["name"]: 
-                            if "360" in n["name"] or "720" in n["name"] or "1080" in n["name"]:
-                                mp4 = n["name"]
-                                ani_ep['mp4'] = mp4
-                                ani_ep['referer'] = referer
-                                i = -1 #while break
-                                break
+                            #if "360" in n["name"] or "720" in n["name"] or "1080" in n["name"]:
+                            mp4 = n["name"]
+                            ani_ep['mp4'] = mp4
+                            ani_ep['referer'] = referer
+                            i = -1 #while break
+                            break
                 elif '.mp4' in mp4:
                     break
                 
