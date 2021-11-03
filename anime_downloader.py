@@ -58,13 +58,13 @@ def search_anime():
             if "No Results Found" not in titles.__str__():
 
                 for title in titles:
-                    searched_anime_lists.append({'href' : title.select(".name")[0]['href'], 'name' : title.select(".name")[0].text})
+                    searched_anime_lists.append({'href' : title.select(".name")[0]['href'], 'name' : title.select(".name")[0].text, 'ep' : title.select(".ep")[0].text})
 
 
 
 
                 for idx, searched_anime_list in enumerate(searched_anime_lists):
-                    print(idx+1, " : ",searched_anime_list['name'])
+                    print(idx+1, " : ",searched_anime_list['name'],searched_anime_list['href'])
 
 
                 ani_sel = 0
@@ -80,7 +80,7 @@ def search_anime():
                     except:
                         print("input error!")
 
-                anime_name = searched_anime_lists[ani_sel-1]['name']
+                anime_name = searched_anime_lists[ani_sel-1]['name'] + ' ' + searched_anime_lists[ani_sel-1]['href']
                 print()
                 print("Your choice : " + anime_name)
                 print()
@@ -113,7 +113,12 @@ def get_anime_pages(driver, ani_page):
     return ani_ep_list
 
 def get_anime_down_url(driver, ani_ep_list):
+    #해당 애니메이션이 시즌2 같은게 나오면 애니제목이 그전 시즌과 그대로이기때문에, 시즌을 구별하기 위해 다시 애니제목을 지정
+    global anime_name
+    anime_name = ''
+
     print("anime info loding...")
+    
     for idx, ani_ep in enumerate(ani_ep_list):
 
                 
@@ -132,6 +137,9 @@ def get_anime_down_url(driver, ani_ep_list):
                 except:
                     time.sleep(1)
 
+        
+        if anime_name == '':
+            anime_name = driver.find_element_by_xpath('//*[@id="main"]/div/div[7]/div/div[1]/div[2]/div[1]/div/h2').text
         
         #blob로 된 다운로드 주소는 어차피 사용불가이기때문에 m3u8을 찾는다
         i = 0
