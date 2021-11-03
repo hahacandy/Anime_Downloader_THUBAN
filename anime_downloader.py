@@ -154,8 +154,8 @@ def get_anime_down_url(driver, ani_ep_list):
                     network_requests = driver.execute_script(JS_get_network_requests)
                     referer = network_requests[0]['name']
                     for n in network_requests:
-                        if "list" not in n["name"]:
-                            if ".m3u8" in n["name"] and "360" in n["name"] or "720" in n["name"] or "1080" in n["name"]: 
+                        if ".m3u8" in n["name"]: 
+                            if "360" in n["name"] or "720" in n["name"] or "1080" in n["name"]:
                                 mp4 = n["name"]
                                 ani_ep['mp4'] = mp4
                                 ani_ep['referer'] = referer
