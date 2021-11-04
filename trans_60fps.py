@@ -4,6 +4,15 @@ import shutil
 import threading
 import time
 
+
+"""
+이 코드는 사용하지 않는다.. 걍만들었으니 둔다
+A's Video Converter 라는 더 좋은 툴이 있기때문에..
+
+このコードはもう使わない
+理由はもっといい性能を持ってるA's Video Converterというツールがあるので。。
+"""
+
 """
 애니는 평균 24fps로 제작되어있다.
 그걸 60fps까지 올리면 애니가 훨씬 부드러워 지기에 그 작업을 한다.
