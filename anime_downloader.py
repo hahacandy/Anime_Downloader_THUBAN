@@ -219,7 +219,7 @@ def download_anime2(idx, ani_ep, _ani_ep_list, save_anime_name, save_dir2, threa
         if ".m3u8" in ani_ep['mp4']:
             ani_save_path = save_dir2 + "/" + save_anime_name + "_ep" + ep_number + ".mp4"
             
-            cmd = 'ffmpeg -y -referer \"' + ani_ep['referer'] + '\" -i \"' + ani_ep['mp4'] + '\" -bsf:a aac_adtstoasc -vcodec copy -c copy -crf 50 ' + ani_save_path
+            cmd = 'ffmpeg -y -referer \"' + ani_ep['referer'] + '\" -i \"' + ani_ep['mp4'] + '\" -bsf:a aac_adtstoasc -c copy ' + ani_save_path
             print(cmd)
             os.system(cmd)
             
