@@ -1,6 +1,8 @@
 animeList = document.getElementsByTagName('tr')
 var index = 0;
 for(var anime of animeList){
+	anime.setAttribute('id', 'anime_'+index);
+	
     var animeName = anime.getElementsByTagName('strong')[0].textContent;
 	
 	animeName = animeName.replace('-', ' ');
@@ -29,5 +31,5 @@ function serachAnime(index, animeName){
 	temp3.setAttribute('style', 'margin-bottom:20px;border:1px solid black');
 	temp2.append(temp3);
 	
-	animeList[index].after(temp);
+	document.getElementById('anime_'+index).after(temp);
 }
