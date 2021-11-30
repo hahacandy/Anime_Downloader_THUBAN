@@ -142,13 +142,11 @@ def get_anime_down_url(driver, ani_ep_list):
             anime_name = driver.find_element_by_xpath('//*[@id="main"]/div/div[7]/div/div[1]/div[2]/div[1]/div/h2').text
         
         #blob로 된 다운로드 주소는 어차피 사용불가이기때문에 m3u8을 찾는다
-        i = 0
-        while i >= 0:
+        while True:
             try:
                 driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
                 driver.find_element_by_tag_name('video').send_keys(Keys.ENTER)
                 mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
-
                 if 'blob' in mp4:
                     JS_get_network_requests = "var performance = window.performance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
                     network_requests = driver.execute_script(JS_get_network_requests)
@@ -159,12 +157,11 @@ def get_anime_down_url(driver, ani_ep_list):
                             mp4 = n["name"]
                             ani_ep['mp4'] = mp4
                             ani_ep['referer'] = referer
-                            i = -1 #while break
+                            print("레퍼런스:" + ani_ep['referer'])
                             break
                 elif '.mp4' in mp4:
+                    ani_ep['mp4'] = mp4
                     break
-                
- 
             except:
                 #에러났으면 초점을 iframe 에서 다시 원래대로 복원해야함
                 driver.switch_to.default_content()   
@@ -174,7 +171,6 @@ def get_anime_down_url(driver, ani_ep_list):
 
                 
         print("주소:" + ani_ep['mp4'])
-        print("레퍼런스:" + ani_ep['referer'])
         driver.switch_to.default_content()   
         print("anime info loding " + str(idx+1) + "/" + str(len(ani_ep_list)))
 
