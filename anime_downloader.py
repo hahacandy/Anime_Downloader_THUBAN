@@ -159,7 +159,7 @@ def get_anime_down_url(driver, ani_ep_list):
                             ani_ep['referer'] = referer
                             print("레퍼런스:" + ani_ep['referer'])
                             break
-                    if 'referer' in ani_ep['referer']:
+                    if 'referer' in ani_ep:
                         break
                 elif '.mp4' in mp4:
                     ani_ep['mp4'] = mp4
