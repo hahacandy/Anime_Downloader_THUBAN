@@ -224,7 +224,7 @@ def download_anime2(idx, ani_ep, _ani_ep_list, save_anime_name, save_dir2, threa
             if os.path.isfile(ani_save_path):
                 result = 0
         else:
-            cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 " + ''.join(ani_ep['mp4'])
+            cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 \"" + ''.join(ani_ep['mp4'] + "\"")
             print(cmd)
             result = os.system(cmd)
         if result == 0:
