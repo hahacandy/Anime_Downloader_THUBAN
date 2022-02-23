@@ -147,23 +147,26 @@ def get_anime_down_url(driver, ani_ep_list):
                 driver.switch_to.frame(driver.find_elements_by_tag_name('iframe')[0])
                 driver.find_element_by_tag_name('video').send_keys(Keys.ENTER)
                 mp4 = driver.find_element_by_tag_name('video').get_attribute('src')
+                JS_get_network_requests = "var performance = window.performance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
+                network_requests = driver.execute_script(JS_get_network_requests)
+                referer = network_requests[0]['name']
+                ani_ep['referer'] = referer
+                
                 if 'blob' in mp4:
-                    JS_get_network_requests = "var performance = window.performance || window.msPerformance || window.webkitPerformance || {}; var network = performance.getEntries() || {}; return network;"
-                    network_requests = driver.execute_script(JS_get_network_requests)
-                    referer = network_requests[0]['name']
                     for n in network_requests:
                         if ".m3u8" in n["name"]: 
                             #if "360" in n["name"] or "720" in n["name"] or "1080" in n["name"]:
                             mp4 = n["name"]
                             ani_ep['mp4'] = mp4
-                            ani_ep['referer'] = referer
-                            print("레퍼런스:" + ani_ep['referer'])
                             break
-                    if 'referer' in ani_ep:
-                        break
                 elif '.mp4' in mp4:
                     ani_ep['mp4'] = mp4
                     break
+                """    
+                if 'referer' in ani_ep:
+                    break
+                """
+                    
             except:
                 #에러났으면 초점을 iframe 에서 다시 원래대로 복원해야함
                 driver.switch_to.default_content()   
@@ -171,7 +174,7 @@ def get_anime_down_url(driver, ani_ep_list):
             #재생버튼 누르면 가끔 광고탭으로 이동함 그래서 1번쨰 탭으로 이동시킴
             driver.switch_to.window(driver.window_handles[0]) 
 
-                
+        print("레퍼런스:" + ani_ep['referer'])
         print("주소:" + ani_ep['mp4'])
         driver.switch_to.default_content()   
         print("anime info loding " + str(idx+1) + "/" + str(len(ani_ep_list)))
@@ -224,7 +227,7 @@ def download_anime2(idx, ani_ep, _ani_ep_list, save_anime_name, save_dir2, threa
             if os.path.isfile(ani_save_path):
                 result = 0
         else:
-            cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 -o " + save_anime_name + "_ep" + ep_number + ".mp4 \"" + ''.join(ani_ep['mp4'] + "\"")
+            cmd = "aria2c -c -x 4 -d " + save_dir2+" -m 5 --referer=\"" + ani_ep['referer'] + "\" -o " + save_anime_name + "_ep" + ep_number + ".mp4 \"" + ''.join(ani_ep['mp4'] + "\"")
             print(cmd)
             result = os.system(cmd)
         if result == 0:
